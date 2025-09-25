@@ -1,0 +1,12 @@
+.page-content {
+  min-height: 100vh;
+  padding-top: 100px;   /* Espaço da navbar */
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-bottom: 60px; /* Espaço para o footer */
+
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}
