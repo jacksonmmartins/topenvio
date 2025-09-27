@@ -1,29 +1,63 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import User from "../Models/User.js";
+import { register, login } from "../Controllers/AuthController.js";
 
 const router = express.Router();
 
+// Middleware para verificar token
+function verifyToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Acesso negado" });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: "Token inválido" });
+    req.user = user; // salva os dados decodificados do token
+    next();
+  });
+}
+
+// Teste inicial
 router.get("/teste", (req, res) => {
   res.send("Backend e MongoDB funcionando!");
 });
 
-router.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+// Criar usuário
+router.post("/register", register);
 
+// Login
+router.post("/login", login);
+
+// Perfil do usuário logado
+router.get("/profile", verifyToken, async (req, res) => {
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "Usuário já existe" });
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) return res.status(404).json({ error: "Usuário não encontrado" });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({ name, email, password: hashedPassword });
-    await newUser.save();
-
-    res.status(201).json({ message: "Usuário criado com sucesso!" });
+    res.json(user);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Erro no servidor" });
+    res.status(500).json({ error: "Erro no servidor" });
+  }
+});
+
+// Atualizar perfil
+router.put("/profile", verifyToken, async (req, res) => {
+  try {
+    const { companyName, companySize } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { companyName, companySize },
+      { new: true }
+    ).select("-password");
+
+    if (!user) return res.status(404).json({ error: "Usuário não encontrado" });
+
+    res.json({ message: "Perfil atualizado com sucesso", user });
+  } catch (err) {
+    res.status(500).json({ error: "Erro no servidor" });
   }
 });
 

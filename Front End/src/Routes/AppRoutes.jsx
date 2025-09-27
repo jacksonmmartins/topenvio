@@ -6,6 +6,7 @@ import Login from "../Pages/Login";
 import Sobre from "../Pages/Sobre";
 import Planos from "../Pages/Planos";
 import CreateUser from "../Pages/CreateUser";
+import CompleteProfile from "../Pages/CompleteProfile";
 
 export default function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function AppRoutes() {
         <Route path="/sobre" element={<Sobre />} />
         <Route path="/planos" element={<Planos />} />
         <Route path="/createuser" element={<CreateUser />} />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
       </Route>
     </Routes>
   );
