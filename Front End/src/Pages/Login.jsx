@@ -60,6 +60,9 @@ export default function Login() {
             Criar Conta
           </span>
         </p>
+        <p>
+       <a href="/forgot-password">Esqueceu sua senha?</a>
+      </p>
       </div>
     </div>
   );

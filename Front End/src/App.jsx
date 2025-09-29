@@ -9,6 +9,8 @@ import CreateUser from "./Pages/CreateUser";
 import CompleteProfile from "./Pages/CompleteProfile";
 import Profile from "./Pages/Profile";
 import PrivateRoute from "./Components/PrivateRoute";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
 
 export default function App() {
   return (
@@ -22,6 +24,9 @@ export default function App() {
           <Route path="sobre" element={<Sobre />} />
           <Route path="login" element={<Login />} />
           <Route path="createuser" element={<CreateUser />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
 
           {/* Páginas privadas */}
           <Route
