@@ -1,44 +1,63 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import api from "../Services/api";
-import "../Layout/Layout.css";
+import { useParams, useNavigate } from "react-router-dom";
+import "./ResetPassword.css";
+
 
 export default function ResetPassword() {
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const { token } = useParams();
   const navigate = useNavigate();
-
-  // Captura o token da URL
-  const query = new URLSearchParams(useLocation().search);
-  const token = query.get("token");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setMessage("As senhas não coincidem");
+      return;
+    }
+
     try {
-      const res = await api.post("/auth/reset-password", { token, password });
-      setMessage(res.data.message);
-      setTimeout(() => navigate("/login"), 2000); // Redireciona após 2s
+      const res = await fetch("http://localhost:5000/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, password }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setMessage("Senha redefinida com sucesso!");
+        setTimeout(() => navigate("/login"), 2000);
+      } else {
+        setMessage(data.error || "Erro ao redefinir senha");
+      }
     } catch (err) {
-      setMessage(err.response?.data?.error || "Erro ao redefinir senha");
+      setMessage("Erro no servidor");
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h2>Redefinir Senha</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="password"
-            placeholder="Nova senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit">Salvar nova senha</button>
-        </form>
-        {message && <p style={{ marginTop: "1rem", color: "green" }}>{message}</p>}
-      </div>
+    <div className="reset-container">
+      <h2>Redefinir Senha</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="password"
+          placeholder="Nova senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Confirmar nova senha"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Redefinir</button>
+      </form>
+      {message && <p>{message}</p>}
     </div>
   );
 }

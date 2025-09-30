@@ -1,0 +1,120 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 400px;
+  margin: 2rem auto;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* indicadores */
+.indicators {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+.dot.active {
+  background: rgba(255,255,255,0.9);
+}
+
+.home-header {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.brand-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #0d47a1; /* azul forte para destaque */
+}
+
+.brand-text {
+  font-size: 1.2rem;
+  color: #444;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Newsletter abaixo do carrossel */
+.newsletter-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #f5f6fa;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.newsletter-container h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #0d47a1; /* azul forte para destaque */
+}
+
+.newsletter-form input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.newsletter-form input:focus {
+  border-color: #0073e6;
+}
+
+.newsletter-form button {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  background-color: #0073e6;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.newsletter-form button:hover {
+  background-color: #005bb5;
+}
+
+.newsletter-message {
+  margin-top: 1rem;
+  color: green;
+  font-weight: 500;
+  font-size: 1rem;
+}
+

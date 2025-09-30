@@ -25,7 +25,6 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="createuser" element={<CreateUser />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
 
 
           {/* Páginas privadas */}
@@ -47,6 +46,10 @@ export default function App() {
           />
         </Route>
       </Routes>
+      <Routes>
+  {/* outras rotas */}
+  <Route path="/reset-password/:token" element={<ResetPassword />} />
+</Routes>
     </Router>
   );
 }

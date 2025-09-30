@@ -1,29 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../Services/api";
-import "../Pages/CreateUser.css"; // Seu CSS já definido
+import "./CreateUser.css";
 
 export default function CreateUser() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      setError("Senhas não conferem");
-      return;
-    }
-
     try {
-      await api.post("/auth/createuser", { name, email, password });
-      navigate("/login"); // redireciona para login após cadastro
+      const res = await api.post("/auth/register", { name, email, password });
+      setMessage(res.data.message);
+
+      // Redireciona para login após cadastro
+      navigate("/login");
     } catch (err) {
-      setError(err.response?.data?.message || "Erro ao criar usuário");
+      setMessage(err.response?.data?.error || "Erro ao criar usuário");
     }
   };
 
@@ -37,30 +33,26 @@ export default function CreateUser() {
             placeholder="Nome"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
           />
           <input
             type="email"
             placeholder="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <input
             type="password"
             placeholder="Senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
-          <input
-            type="password"
-            placeholder="Repetir Senha"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <button type="submit">Criar Conta</button>
+          <button type="submit">Cadastrar</button>
         </form>
-        {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
+        {message && <p style={{ marginTop: "1rem" }}>{message}</p>}
       </div>
     </div>
   );
 }
-
