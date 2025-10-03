@@ -1,0 +1,62 @@
+.admin-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-container h2 {
+  text-align: center;
+  color: #0d47a1; /* mesma cor do título da home */
+  margin-bottom: 25px;
+}
+
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Estilo dos cards */
+.client-card {
+  background: #1565c0; /* azul semelhante à navbar */
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.client-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+.client-card h3 {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+}
+
+.client-card p {
+  margin: 5px 0;
+  font-size: 0.95rem;
+}
+
+/* Botão de excluir */
+.delete-btn {
+  margin-top: 12px;
+  background: #e63946;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: #d62828;
+}
