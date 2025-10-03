@@ -1,9 +1,9 @@
-/* Navbar geral */
+/* Navbar geral (desktop) */
 .navbar {
   width: 100%;
-  background-color: #0073e6; /* Azul escuro */
+  background-color: #0073e6;
   display: flex;
-  justify-content: center; /* centraliza horizontalmente */
+  justify-content: space-between; /* marca à esquerda, menu à direita */
   align-items: center;
   padding: 1rem 2rem;
   position: fixed;
@@ -19,10 +19,9 @@
 .navbar-brand {
   font-weight: bold;
   font-size: 1.5rem;
-  margin-right: 2rem;
 }
 
-/* Menu da Navbar */
+/* Menu da Navbar (desktop) */
 .navbar-menu {
   list-style: none;
   display: flex;
@@ -40,7 +39,7 @@
 }
 
 .navbar-menu li a:hover {
-  color: #ffdd57; /* efeito hover */
+  color: #ffdd57;
 }
 
 /* Botão sair */
@@ -54,23 +53,44 @@
 }
 
 .navbar-menu li button:hover {
-  color: #ff4d4f; /* vermelho suave ao passar mouse */
+  color: #ff4d4f;
 }
 
-/* Responsividade */
+/* Botão sanduíche (apenas mobile) */
+.menu-toggle {
+  display: none; /* só aparece no mobile */
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.menu-toggle .bar {
+  width: 25px;
+  height: 3px;
+  background: white;
+  margin: 4px 0;
+  border-radius: 2px;
+}
+
+/* Responsividade (mobile) */
 @media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    gap: 0.5rem;
+  .menu-toggle {
+    display: flex;
   }
 
   .navbar-menu {
+    display: none; /* escondido por padrão */
+    position: absolute;
+    top: 60px;
+    right: 0;
     flex-direction: column;
-    gap: 0.8rem;
-    align-items: center;
+    gap: 1rem;
+    background-color: #0073e6;
+    width: 200px;
+    padding: 1rem;
+    border-radius: 0 0 8px 8px;
   }
 
-  .navbar-brand {
-    margin-right: 0;
+  .navbar-menu.open {
+    display: flex; /* aberto quando ativo */
   }
 }

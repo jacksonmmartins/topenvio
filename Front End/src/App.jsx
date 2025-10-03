@@ -11,6 +11,8 @@ import Profile from "./Pages/Profile";
 import PrivateRoute from "./Components/PrivateRoute";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
+import Admin from "./Pages/Admin";
+import AdminPanel from "./Pages/AdminPanel";
 
 export default function App() {
   return (
@@ -25,8 +27,7 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="createuser" element={<CreateUser />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-
+          <Route path="/admin" element={<AdminPanel />} />
 
           {/* Páginas privadas */}
           <Route
@@ -46,7 +47,12 @@ export default function App() {
             }
           />
         </Route>
+        <Route path="/admin" element={<Admin />} />
       </Routes>
+      <Routes>
+  {/* outras rotas */}
+  <Route path="/reset-password/:token" element={<ResetPassword />} />
+</Routes>
     </Router>
   );
 }

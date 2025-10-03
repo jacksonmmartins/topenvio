@@ -58,8 +58,18 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Senha incorreta" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-    res.json({ token, user: { name: user.name, email: user.email, companyName: user.companyName, companySize: user.companySize } });
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+    res.json({ 
+  token, 
+  user: { 
+    name: user.name, 
+    email: user.email, 
+    role: user.role,   // <-- adiciona o role
+    companyName: user.companyName, 
+    companySize: user.companySize 
+  } 
+});
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erro no servidor" });

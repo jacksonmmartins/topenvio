@@ -1,24 +1,90 @@
+import { useState, useEffect } from "react";
+import img1 from "../images/img1.jpg";
+import img2 from "../images/img2.jpg";
+import img3 from "../images/img3.jpg";
+import img4 from "../images/img4.jpg";
+import img5 from "../images/img5.jpg";
+import "./Home.css";
 
-export default function Home () {
-    return (
-        <div>
-      <h1>Bem-vindo à Home</h1>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-        scelerisque magna sed augue eleifend, ac gravida ipsum faucibus. Proin
-        commodo augue nec risus efficitur, sit amet vulputate libero ultricies.
-        Sed vel diam vitae arcu faucibus convallis. Integer luctus, lorem sed
-        posuere varius, justo lacus vulputate nunc, in luctus lorem justo sed
-        ex. Cras at feugiat lorem. Vestibulum ante ipsum primis in faucibus
-        orci luctus et ultrices posuere cubilia curae.
-      </p>
-      <p>
-        Vivamus luctus massa eu nulla interdum fermentum. Aliquam erat volutpat.
-        Donec pharetra suscipit nunc, eget varius orci blandit nec. Duis eget
-        feugiat orci. Sed nec dignissim erat. Etiam a risus sit amet leo
-        vulputate venenatis. Sed sollicitudin luctus risus, sed fermentum purus
-        vehicula et.
-      </p>
+const images = [img1, img2, img3, img4, img5];
+
+export default function Home() {
+  const [current, setCurrent] = useState(0);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  // autoplay a cada 3s
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setMessage(`Obrigado, ${name}! Você se inscreveu com ${email}`);
+    setName("");
+    setEmail("");
+  };
+
+  return (
+    <div className="home">
+      {/* Bloco de texto separado */}
+      <div className="home-header">
+        <p className="brand-text">
+          A escolha inteligente para entregas rápidas e seguras. <br />
+          Com tecnologia e agilidade, conectamos sua empresa aos clientes em todo o Brasil. <br />
+          Soluções de transporte confiáveis para quem valoriza prazo e qualidade. <br />
+          Seu negócio vai mais longe com a gente.
+        </p>
+      </div>
+
+      {/* Carrossel */}
+      <div className="carousel">
+        <div
+          className="carousel-track"
+          style={{ transform: `translateX(-${current * 100}%)` }}
+        >
+          {images.map((src, i) => (
+            <img key={i} src={src} alt={`slide ${i}`} className="carousel-img" />
+          ))}
+        </div>
+
+        <div className="indicators">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              className={`dot ${i === current ? "active" : ""}`}
+              onClick={() => setCurrent(i)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Newsletter abaixo do carrossel */}
+      <div className="newsletter-container">
+        <h2>Se inscreva na nossa News Letter!</h2>
+        <form onSubmit={handleSubmit} className="newsletter-form">
+          <input
+            type="text"
+            placeholder="Seu nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type="email"
+            placeholder="Seu e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <button type="submit">Inscrever-se</button>
+        </form>
+        {message && <p className="newsletter-message">{message}</p>}
+      </div>
     </div>
-    )
+  );
 }
