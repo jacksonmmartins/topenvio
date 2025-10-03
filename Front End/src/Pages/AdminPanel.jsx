@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import api from "../Services/api";
-import "../Layout/Layout.css"; // garante que tenha estilos globais
+import "./AdminPanel.css"; // garante que tenha estilos globais
 
 export default function AdminPanel() {
   const [clients, setClients] = useState([]);
