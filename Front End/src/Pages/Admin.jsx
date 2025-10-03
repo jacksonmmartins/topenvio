@@ -1,0 +1,50 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "./Admin.css";
+import { FaTrash } from "react-icons/fa";
+
+export default function Admin() {
+  const [clients, setClients] = useState([]);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/admin/clients", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setClients(res.data))
+      .catch((err) => console.error(err));
+  }, [token]);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Deseja excluir este cliente?")) return;
+    try {
+      await axios.delete(`http://localhost:5000/api/admin/clients/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setClients(clients.filter((c) => c._id !== id));
+      alert("Cliente excluído e e-mail enviado!");
+    } catch (err) {
+      alert("Erro ao excluir cliente");
+    }
+  };
+
+  return (
+    <div className="admin-page">
+      <h1>Painel do Administrador</h1>
+      <div className="client-cards">
+        {clients.map((client) => (
+          <div key={client._id} className="client-card">
+            <h3>{client.name}</h3>
+            <p><strong>Email:</strong> {client.email}</p>
+            <p><strong>Empresa:</strong> {client.companyName || "Não informado"}</p>
+            <p><strong>Porte:</strong> {client.companySize}</p>
+            <button onClick={() => handleDelete(client._id)} className="delete-btn">
+              <FaTrash /> Excluir
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
