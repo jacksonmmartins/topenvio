@@ -7,6 +7,8 @@ import Sobre from "../Pages/Sobre";
 import Planos from "../Pages/Planos";
 import CreateUser from "../Pages/CreateUser";
 import CompleteProfile from "../Pages/CompleteProfile";
+import Usuarios from "../Pages/Usuarios";
+import Admin from "../Pages/AdminPanel";
 
 export default function AppRoutes() {
   return (
@@ -19,6 +21,8 @@ export default function AppRoutes() {
         <Route path="/planos" element={<Planos />} />
         <Route path="/createuser" element={<CreateUser />} />
         <Route path="/complete-profile" element={<CompleteProfile />} />
+          <Route path="/admin" element={<Admin />} />
+         <Route path="/usuarios" element={<Usuarios />} />
       </Route>
     </Routes>
   );

@@ -1,58 +1,28 @@
-// src/Pages/AdminPanel.jsx
-import { useEffect, useState } from "react";
-import { FaTrash } from "react-icons/fa";
-import api from "../Services/api";
-import "./AdminPanel.css"; // garante que tenha estilos globais
+// src/pages/Admin.jsx
+import { useNavigate } from "react-router-dom";
+import "./AdminPanel.css";
 
-export default function AdminPanel() {
-  const [clients, setClients] = useState([]);
+export default function Admin() {
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await api.get("/admin/users", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setClients(res.data);
-      } catch (err) {
-        console.error("Erro ao buscar clientes:", err);
-      }
-    };
-    fetchClients();
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Tem certeza que deseja excluir este cliente?")) return;
-
-    try {
-      const token = localStorage.getItem("token");
-      await api.delete(`/admin/users/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setClients(clients.filter(c => c._id !== id));
-    } catch (err) {
-      console.error("Erro ao excluir cliente:", err);
-    }
-  };
+  const cards = [
+    { title: "Usuários Ativos", route: "/usuarios", description: "Gerencie os usuários ativos do sistema" },
+    { title: "Planos Ativos", route: "/planos", description: "Visualize e edite os planos disponíveis" }
+  ];
 
   return (
     <div className="admin-container">
-      <h2>Painel do Administrador</h2>
-      <div className="clients-grid">
-        {clients.length === 0 && <p>Nenhum cliente encontrado.</p>}
-        {clients.map((client) => (
-          <div key={client._id} className="client-card">
-            <h3>{client.name}</h3>
-            <p><strong>Email:</strong> {client.email}</p>
-            <p><strong>Empresa:</strong> {client.companyName || "Não informado"}</p>
-            <p><strong>Porte:</strong> {client.companySize}</p>
-            <button 
-              className="delete-btn" 
-              onClick={() => handleDelete(client._id)}
-            >
-              <FaTrash /> Excluir
-            </button>
+      <h1 className="admin-title">Painel Administrativo</h1>
+
+      <div className="cards-grid">
+        {cards.map((card, index) => (
+          <div
+            key={index}
+            onClick={() => navigate(card.route)}
+            className="admin-card"
+          >
+            <h2 className="card-title">{card.title}</h2>
+            <p className="card-description">{card.description}</p>
           </div>
         ))}
       </div>

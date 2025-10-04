@@ -3,7 +3,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../Models/User.js";
-import { transporter } from "../Config/nodemailer.js"; 
+import { transporter } from "../Config/nodemailer.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -60,16 +60,16 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-    res.json({ 
-  token, 
-  user: { 
-    name: user.name, 
-    email: user.email, 
-    role: user.role,   // <-- adiciona o role
-    companyName: user.companyName, 
-    companySize: user.companySize 
-  } 
-});
+    res.json({
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+        role: user.role,   // <-- adiciona o role
+        companyName: user.companyName,
+        companySize: user.companySize
+      }
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erro no servidor" });

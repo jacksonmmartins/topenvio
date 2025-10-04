@@ -1,4 +1,3 @@
-// src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./Layout/Layout";
 import Home from "./Pages/Home";
@@ -13,6 +12,7 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
 import Admin from "./Pages/Admin";
 import AdminPanel from "./Pages/AdminPanel";
+import Usuarios from "./Pages/Usuarios";
 
 export default function App() {
   return (
@@ -27,7 +27,7 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="createuser" element={<CreateUser />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
 
           {/* Páginas privadas */}
           <Route
@@ -46,13 +46,38 @@ export default function App() {
               </PrivateRoute>
             }
           />
+
+          {/* Admin e usuários protegidos */}
+          <Route
+            path="admin"
+            element={
+              <PrivateRoute adminOnly={true}>
+                <AdminPanel />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="usuarios"
+            element={
+              <PrivateRoute adminOnly={true}>
+                <Usuarios />
+              </PrivateRoute>
+            }
+          />
+
         </Route>
-        <Route path="/admin" element={<Admin />} />
+
+        {/* Rota alternativa Admin (se precisar separar) */}
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <Admin />
+            </PrivateRoute>
+          }
+        />
       </Routes>
-      <Routes>
-  {/* outras rotas */}
-  <Route path="/reset-password/:token" element={<ResetPassword />} />
-</Routes>
     </Router>
   );
 }
