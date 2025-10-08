@@ -1,6 +1,7 @@
+// src/Pages/Login.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../Services/api";
+import { login } from "../Services/api"; // ✅ Corrigido
 import "../Layout/Layout.css";
 
 export default function Login() {
@@ -11,38 +12,29 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  // Se já estiver logado, redireciona conforme o role salvo
   useEffect(() => {
     if (token) {
       const userRole = localStorage.getItem("role");
-      if (userRole === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/profile");
-      }
+      if (userRole === "admin") navigate("/admin");
+      else navigate("/profile");
     }
   }, [token, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/auth/login", { email, password });
+      const res = await login(email, password);
 
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.user.role); // <-- salva o role
-      localStorage.setItem("user", JSON.stringify(res.data.user)); // opcional, se quiser usar depois
+      localStorage.setItem("role", res.data.user.role);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      // Redireciona de acordo com o role
-      if (res.data.user.role === "admin") {
-        navigate("/admin");
-      } else {
-        // Se for cliente, verifica se já tem perfil completo
-        if (!res.data.user.companyName || !res.data.user.companySize) {
-          navigate("/completeprofile");
-        } else {
-          navigate("/profile");
-        }
-      }
+      // Redireciona conforme o tipo de usuário
+      if (res.data.user.role === "admin") navigate("/admin");
+      else if (!res.data.user.companyName || !res.data.user.companySize)
+        navigate("/completeprofile");
+      else navigate("/profile");
+
     } catch (err) {
       setMessage(err.response?.data?.message || "Erro ao fazer login");
     }
@@ -67,7 +59,9 @@ export default function Login() {
           />
           <button type="submit">Entrar</button>
         </form>
-        {message && <p style={{ marginTop: "1rem", color: "red" }}>{message}</p>}
+
+        {message && <p style={{ color: "red" }}>{message}</p>}
+
         <p>
           Não tem conta?{" "}
           <span
@@ -77,6 +71,7 @@ export default function Login() {
             Criar Conta
           </span>
         </p>
+
         <p>
           <a href="/forgot-password">Esqueceu sua senha?</a>
         </p>

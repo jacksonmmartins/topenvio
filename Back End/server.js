@@ -1,11 +1,14 @@
+// Back End/server.js
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import authRoutes from "./Routes/Auth.js";
-import User from "./Models/User.js";
-import adminRoutes from "./Routes/Admin.js";
 import bcrypt from "bcrypt";
+
+import authRoutes from "./Routes/Auth.js";
+import adminRoutes from "./Routes/Admin.js";
+import planosRoutes from "./Routes/Planos.js"; // ✅ corrigido
+import User from "./Models/User.js";
 
 dotenv.config();
 
@@ -15,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/planos", planosRoutes); // ✅ rota de planos separada
 
 const PORT = process.env.PORT || 5000;
 

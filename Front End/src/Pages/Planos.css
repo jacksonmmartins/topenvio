@@ -1,0 +1,97 @@
+.planos-container {
+  max-width: 900px;
+  margin: 80px auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+.planos-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #0073e6;
+}
+
+/* Área do admin */
+.admin-section {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 40px;
+}
+
+.planos-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.planos-form label {
+  font-weight: bold;
+  color: #0073e6;
+}
+
+.planos-form input,
+.planos-form select,
+.planos-form textarea {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.planos-form button {
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.planos-form button:hover {
+  background-color: #005bb5;
+}
+
+/* Cards de planos */
+.planos-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.plano-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  background: #fff;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.plano-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.plano-card h3 {
+  color: #0073e6;
+  margin-bottom: 10px;
+}
+
+.plano-card p {
+  margin: 5px 0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .planos-container {
+    padding: 10px;
+  }
+  .planos-form {
+    gap: 10px;
+  }
+}
