@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Define a URL base dependendo do ambiente
-const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const baseURL = import.meta.env.VITE_API_URL || "https://topenvio.onrender.com/auth";
 
 const api = axios.create({
   baseURL,
