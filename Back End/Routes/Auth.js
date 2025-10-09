@@ -58,23 +58,38 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Senha incorreta" });
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
+    // Cria o token JWT
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
+    // Envia token como cookie seguro
+    res.cookie("token", token, {
+      httpOnly: true,      // não acessível via JS
+      secure: true,        // HTTPS obrigatório (produção)
+      sameSite: "None",    // necessário para Safari / mobile
+      maxAge: 24 * 60 * 60 * 1000 // 1 dia
+    });
+
+    // Retorna também info do usuário
     res.json({
-      token,
       user: {
         name: user.name,
         email: user.email,
-        role: user.role,   // <-- adiciona o role
+        role: user.role,
         companyName: user.companyName,
         companySize: user.companySize
       }
     });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erro no servidor" });
   }
 });
+
 
 // Esqueci a senha
 router.post("/forgot-password", async (req, res) => {

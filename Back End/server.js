@@ -13,7 +13,10 @@ import User from "./Models/User.js";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: ["https://topenvio.vercel.app"], // domínio do seu front
+  credentials: true                       // permite cookies/autenticação
+}));
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
