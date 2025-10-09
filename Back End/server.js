@@ -7,24 +7,36 @@ import bcrypt from "bcrypt";
 
 import authRoutes from "./Routes/Auth.js";
 import adminRoutes from "./Routes/Admin.js";
-import planosRoutes from "./Routes/Planos.js"; // ✅ corrigido
+import planosRoutes from "./Routes/Planos.js"; 
 import User from "./Models/User.js";
 
 dotenv.config();
 
 const app = express();
+
+// 🔹 CORS configurado para frontend Vercel + preflight
+const allowedOrigins = ["https://topenvio.vercel.app"];
 app.use(cors({
-  origin: ["https://topenvio.vercel.app"], // domínio do seu front
-  credentials: true                       // permite cookies/autenticação
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
 }));
+
+// Preflight OPTIONS para todas as rotas
+app.options("*", cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+}));
+
 app.use(express.json());
 
+// 🔹 Rotas
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/planos", planosRoutes); // ✅ rota de planos separada
+app.use("/api/planos", planosRoutes);
 
-const PORT = process.env.PORT || 5000;
-
+// 🔹 Conexão MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -32,6 +44,7 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("Conectado ao MongoDB"))
 .catch((err) => console.error("Erro ao conectar:", err));
 
+// 🔹 Criar usuário admin se não existir
 async function createAdminUser() {
   const adminEmail = process.env.ADMIN_EMAIL || "admin@topenvio.com";
   const adminPassword = process.env.ADMIN_PASSWORD || "123456";
@@ -51,4 +64,5 @@ async function createAdminUser() {
 
 createAdminUser();
 
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
