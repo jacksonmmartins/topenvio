@@ -1,24 +1,45 @@
 // src/Services/api.js
 import axios from "axios";
 
-// Define a URL base dependendo do ambiente
-const baseURL = import.meta.env.VITE_API_URL || "https://topenvio.onrender.com/auth";
+// 🔹 Base URL dependendo do ambiente
+// - Local: localhost
+// - Produção: variável de ambiente VITE_API_URL (Vercel)
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+// 🔹 Cria instância do Axios
 const api = axios.create({
   baseURL,
-  withCredentials: true, // permite enviar cookies se backend usar autenticação baseada em cookies
+  withCredentials: true, // necessário se backend usar cookies
 });
 
-// Interceptor para adicionar token do localStorage
+// 🔹 Interceptor para enviar token JWT se existir
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token"); // opcional se usar JWT
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
-// 🔹 Funções Auth
+// 🔹 Funções de autenticação
+
+// Login
+// Se backend usar cookies, o token é enviado automaticamente
 export async function login(email, password) {
   return api.post("/auth/login", { email, password }, { withCredentials: true });
+}
+
+// Registrar usuário
+export async function register(name, email, password) {
+  return api.post("/auth/register", { name, email, password });
+}
+
+// Perfil do usuário logado
+export async function getProfile() {
+  return api.get("/auth/profile");
+}
+
+// Atualizar perfil
+export async function updateProfile(data) {
+  return api.put("/auth/profile", data);
 }
 
 // 🔹 Funções Planos
@@ -38,4 +59,5 @@ export async function excluirPlano(id) {
   return api.delete(`/planos/${id}`); // só admin
 }
 
+// 🔹 Exporta a instância Axios
 export default api;
