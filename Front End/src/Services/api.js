@@ -1,15 +1,11 @@
 // src/Services/api.js
 import axios from "axios";
 
-// 🔹 Base URL dependendo do ambiente
-// - Local: localhost
-// - Produção: variável de ambiente VITE_API_URL (Vercel)
-const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const baseURL = import.meta.env.VITE_API_URL || "https://topenvio.onrender.com/api";
 
-// 🔹 Cria instância do Axios
 const api = axios.create({
   baseURL,
-  withCredentials: true, // necessário se backend usar cookies
+  withCredentials: true
 });
 
 // 🔹 Interceptor para enviar token JWT se existir
