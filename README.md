@@ -1,3 +1,14 @@
+# Quem sou eu?
+Me chamo Jackson Martins Miranda | https://www.linkedin.com/in/jacksonmmartins/
+Desenvolvedor e Analista de Sistemas com experiência em todo o ciclo de
+desenvolvimento de software, desde o levantamento de requisitos até a entrega
+em produção. Atuação em aplicações web escaláveis, com domínio em Java
+(Spring Boot), JavaScript (React.js, Vue.js, Node.js) e bancos de dados SQL
+Server, PostgreSQL e MongoDB. Experiência em integração de APIs, migração
+de sistemas legados, automação de processos e segurança da informação. Perfil
+proativo, com forte capacidade de identificar melhorias, otimizar processos e
+entregar soluções alinhadas às necessidades de negócio.
+
 # topenvio 🚀
 
 **topenvio** é uma plataforma de serviço de entregas de mercadorias, que abrange todo o país. De entregas de A a Z. Focado na segurança de seus dados, e bem estar do cliente. 
