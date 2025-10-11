@@ -65,16 +65,17 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    // Envia token como cookie seguro
+   // Envia token como cookie seguro
     res.cookie("token", token, {
-      httpOnly: true,      // não acessível via JS
-      secure: true,        // HTTPS obrigatório (produção)
-      sameSite: "None",    // necessário para Safari / mobile
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // true em produção
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 24 * 60 * 60 * 1000 // 1 dia
     });
 
-    // Retorna também info do usuário
+  // 🔹 Retorna também o token no corpo (para salvar no localStorage)
     res.json({
+      token, // 👈 necessário para o front
       user: {
         name: user.name,
         email: user.email,

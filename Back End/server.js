@@ -3,66 +3,89 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import bcrypt from "bcrypt";
 
 import authRoutes from "./Routes/Auth.js";
 import adminRoutes from "./Routes/Admin.js";
-import planosRoutes from "./Routes/Planos.js"; 
+import planosRoutes from "./Routes/Planos.js";
 import User from "./Models/User.js";
 
 dotenv.config();
-
 const app = express();
 
-// 🔹 CORS configurado para frontend Vercel + preflight
-const allowedOrigins = ["https://topenvio.vercel.app"];
-app.use(cors({
-  origin: allowedOrigins,
+// ============================================================
+// 🌐 Configuração CORS (para ambiente local e produção)
+const allowedOrigins = [
+  "https://topenvio.vercel.app", // produção (Vercel)
+  "http://localhost:5173",        // desenvolvimento local (Vite)
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn("🚫 CORS bloqueado para origem:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // 👈 permite cookies/autenticação
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true
-}));
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
-// Preflight OPTIONS para todas as rotas
-app.options("*", cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-}));
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // para preflight (Safari / mobile)
+// ============================================================
 
+// 🧩 Middlewares
 app.use(express.json());
+app.use(cookieParser());
 
-// 🔹 Rotas
+// ============================================================
+// 🛠 Rotas
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/planos", planosRoutes);
 
-// 🔹 Conexão MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("Conectado ao MongoDB"))
-.catch((err) => console.error("Erro ao conectar:", err));
+// ============================================================
+// 💾 Conexão com o MongoDB
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ Conectado ao MongoDB"))
+  .catch((err) => console.error("❌ Erro ao conectar:", err));
 
-// 🔹 Criar usuário admin se não existir
+// ============================================================
+// 👑 Criação automática do admin padrão
 async function createAdminUser() {
   const adminEmail = process.env.ADMIN_EMAIL || "admin@topenvio.com";
   const adminPassword = process.env.ADMIN_PASSWORD || "123456";
 
-  const existing = await User.findOne({ email: adminEmail });
-  if (!existing) {
-    const hashedPassword = await bcrypt.hash(adminPassword, 10);
-    await User.create({
-      name: "Administrador",
-      email: adminEmail,
-      password: hashedPassword,
-      role: "admin"
-    });
-    console.log("Administrador criado com sucesso!");
+  try {
+    const existing = await User.findOne({ email: adminEmail });
+    if (!existing) {
+      const hashedPassword = await bcrypt.hash(adminPassword, 10);
+      await User.create({
+        name: "Administrador",
+        email: adminEmail,
+        password: hashedPassword,
+        role: "admin",
+      });
+      console.log("👑 Administrador criado com sucesso!");
+    }
+  } catch (err) {
+    console.error("Erro ao criar admin:", err);
   }
 }
-
 createAdminUser();
 
+// ============================================================
+// 🚀 Inicialização do servidor
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`🚀 Servidor rodando na porta ${PORT} — Ambiente: ${process.env.NODE_ENV}`)
+);

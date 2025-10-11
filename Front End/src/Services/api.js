@@ -1,11 +1,16 @@
 // src/Services/api.js
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_API_URL || "https://topenvio.onrender.com/api";
+// 🔹 Define a URL base dependendo do ambiente
+const baseURL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000/api"      // backend local
+    : import.meta.env.VITE_API_URL || "https://topenvio.onrender.com/api"; // backend remoto
 
+// 🔹 Cria instância Axios
 const api = axios.create({
   baseURL,
-  withCredentials: true
+  withCredentials: true, // necessário para cookies/JWT
 });
 
 // 🔹 Interceptor para enviar token JWT se existir
@@ -20,7 +25,7 @@ api.interceptors.request.use((config) => {
 // Login
 // Se backend usar cookies, o token é enviado automaticamente
 export async function login(email, password) {
-  return api.post("/auth/login", { email, password }, { withCredentials: true });
+  return api.post("/auth/login", { email, password });
 }
 
 // Registrar usuário

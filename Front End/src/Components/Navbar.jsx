@@ -8,18 +8,21 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
 
-  useEffect(() => {
-    if (token) {
-      try {
-        const decoded = JSON.parse(atob(token.split(".")[1]));
-        setUserRole(decoded.role);
-      } catch (error) {
-        console.error("Erro ao decodificar token:", error);
-      }
-    } else {
+ useEffect(() => {
+  if (token && token.includes(".")) {
+    try {
+      const payload = token.split(".")[1];
+      const decoded = JSON.parse(atob(payload));
+      setUserRole(decoded.role || null);
+    } catch (error) {
+      console.error("Erro ao decodificar token:", error);
+      localStorage.removeItem("token"); // remove token corrompido
       setUserRole(null);
     }
-  }, [token]);
+  } else {
+    setUserRole(null);
+  }
+}, [token]);
 
   const handleLogout = () => {
     localStorage.clear();

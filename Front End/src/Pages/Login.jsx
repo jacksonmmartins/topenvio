@@ -24,7 +24,6 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await login(email, password);
-
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.user.role);
       localStorage.setItem("user", JSON.stringify(res.data.user));
