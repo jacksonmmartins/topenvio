@@ -1,5 +1,6 @@
 # Quem sou eu?
 Me chamo Jackson Martins Miranda | https://www.linkedin.com/in/jacksonmmartins/
+
 Desenvolvedor e Analista de Sistemas com experiência em todo o ciclo de
 desenvolvimento de software, desde o levantamento de requisitos até a entrega
 em produção. Atuação em aplicações web escaláveis, com domínio em Java
