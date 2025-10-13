@@ -1,0 +1,64 @@
+.sobre-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background: #ffffff; /* fundo branco */
+  padding-top: 4rem; /* card mais próximo da navbar */
+}
+
+.sobre-card {
+  width: 85%;
+  max-width: 850px;
+  padding: 3rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 0 25px rgba(0, 136, 255, 0.25);
+  border: 1px solid rgba(0, 136, 255, 0.15);
+  text-align: center;
+  color: #333;
+  transition: all 0.3s ease;
+  margin-top: 0; /* remove espaçamento extra */
+}
+
+.sobre-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 35px rgba(0, 150, 255, 0.3);
+}
+
+.sobre-card h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  color: #0078ff;
+  text-shadow: 0 0 6px rgba(0, 120, 255, 0.25);
+  letter-spacing: 0.5px;
+}
+
+.sobre-card p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: justify;
+}
+
+.sobre-card strong {
+  color: #0078ff;
+}
+
+@media (max-width: 768px) {
+  .sobre-card {
+    padding: 2rem;
+    margin-top: 1rem; /* leve respiro em mobile */
+  }
+
+  .sobre-card h1 {
+    font-size: 1.8rem;
+  }
+
+  .sobre-card p {
+    font-size: 1rem;
+  }
+}

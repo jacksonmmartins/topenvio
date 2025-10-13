@@ -1,24 +1,23 @@
+import "./Sobre.css";
 
-export default function Sobre () {
-    return (
-        <div>
-      <h1>Sobre</h1>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-        scelerisque magna sed augue eleifend, ac gravida ipsum faucibus. Proin
-        commodo augue nec risus efficitur, sit amet vulputate libero ultricies.
-        Sed vel diam vitae arcu faucibus convallis. Integer luctus, lorem sed
-        posuere varius, justo lacus vulputate nunc, in luctus lorem justo sed
-        ex. Cras at feugiat lorem. Vestibulum ante ipsum primis in faucibus
-        orci luctus et ultrices posuere cubilia curae.
-      </p>
-      <p>
-        Vivamus luctus massa eu nulla interdum fermentum. Aliquam erat volutpat.
-        Donec pharetra suscipit nunc, eget varius orci blandit nec. Duis eget
-        feugiat orci. Sed nec dignissim erat. Etiam a risus sit amet leo
-        vulputate venenatis. Sed sollicitudin luctus risus, sed fermentum purus
-        vehicula et.
-      </p>
-    </div>
-    )
+export default function Sobre() {
+  return (
+    <section className="sobre-section">
+      <div className="sobre-card">
+        <h1>Sobre a Top Envio</h1>
+        <p>
+          A <strong>Top Envio</strong> é uma plataforma desenvolvida para
+          simplificar e automatizar a gestão de envios. Unimos tecnologia,
+          eficiência e suporte humano para oferecer uma experiência completa e
+          confiável.
+        </p>
+        <p>
+          Nosso foco é proporcionar controle total das operações logísticas,
+          reduzindo custos e aumentando a agilidade do seu negócio. Com
+          tecnologia 100% brasileira, oferecemos inovação e desempenho em cada
+          envio.
+        </p>
+      </div>
+    </section>
+  );
 }
