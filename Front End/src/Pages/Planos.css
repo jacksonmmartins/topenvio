@@ -1,24 +1,94 @@
+/* ---------------------------
+   Container principal
+--------------------------- */
 .planos-container {
-  max-width: 900px;
-  margin: 80px auto;
+  max-width: 1100px;
+  margin: 20px auto 80px auto; /* topo reduzido para 20px */
   padding: 20px;
-  font-family: 'Arial', sans-serif;
-  color: #333;
-}
-
-.planos-container h1 {
+  font-family: "Inter", Arial, sans-serif;
+  color: #2d2d2d;
   text-align: center;
-  margin-bottom: 30px;
-  color: #0073e6;
 }
 
-/* Área do admin */
-.admin-section {
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 12px;
+/* Scroll suave e padding para navbar fixa */
+html {
+  scroll-behavior: smooth; /* transição suave ao rolar */
+  scroll-padding-top: 60px; /* ajuste para navbar fixa */
+}
+
+/* Títulos */
+.titulo-principal {
+  font-size: 2rem;
+  color: #0073e6;
+  margin-bottom: 10px;
+}
+
+.subtitulo {
+  font-size: 1.1rem;
+  color: #555;
   margin-bottom: 40px;
+}
+
+/* ---------------------------
+   Bloco institucional "Por que escolher a Top Envio?"
+--------------------------- */
+.destaque-topenvio {
+  background: linear-gradient(135deg, #f7fbff, #e9f4ff);
+  border: 1px solid rgba(0, 115, 230, 0.1);
+  border-radius: 16px;
+  padding: 25px 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 20px rgba(0, 115, 230, 0.05);
+  text-align: left;
+}
+
+.destaque-topenvio h2 {
+  color: #0073e6;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.destaque-topenvio ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 20px;
+}
+
+.destaque-topenvio li {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 25px;
+}
+
+.destaque-topenvio li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #00a2ff;
+  font-weight: bold;
+}
+
+.frase-final {
+  font-size: 1.05rem;
+  color: #004d99;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* ---------------------------
+   Área Admin
+--------------------------- */
+.admin-section {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 15px rgba(0, 115, 230, 0.1);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 50px;
+  backdrop-filter: blur(8px);
 }
 
 .planos-form {
@@ -28,70 +98,130 @@
 }
 
 .planos-form label {
-  font-weight: bold;
+  font-weight: 600;
   color: #0073e6;
+  text-align: left;
 }
 
 .planos-form input,
 .planos-form select,
 .planos-form textarea {
   padding: 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 1rem;
 }
 
-.planos-form button {
-  background-color: #0073e6;
+.btn-primary {
+  background: linear-gradient(135deg, #0073e6, #00b3ff);
   color: white;
   border: none;
-  padding: 10px;
-  border-radius: 6px;
+  padding: 12px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
+  font-weight: 600;
+  transition: all 0.3s;
 }
 
-.planos-form button:hover {
-  background-color: #005bb5;
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #005bb5, #0090cc);
 }
 
-/* Cards de planos */
+/* ---------------------------
+   Cards de planos
+--------------------------- */
 .planos-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
 }
 
 .plano-card {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 20px;
-  background: #fff;
-  text-align: center;
-  transition: 0.3s;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  padding: 25px;
+  border: 1px solid rgba(0, 115, 230, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 115, 230, 0.1);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
 }
 
 .plano-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 115, 230, 0.2);
 }
 
 .plano-card h3 {
   color: #0073e6;
   margin-bottom: 10px;
+  font-size: 1.3rem;
 }
 
-.plano-card p {
-  margin: 5px 0;
+.valor {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #00a2ff;
+  margin: 10px 0;
 }
 
-/* Responsivo */
+.descricao {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* ---------------------------
+   Botões admin
+--------------------------- */
+.admin-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-editar,
+.btn-excluir {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-editar {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.btn-editar:hover {
+  background-color: #e0a800;
+}
+
+.btn-excluir {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-excluir:hover {
+  background-color: #b02a37;
+}
+
+/* ---------------------------
+   Responsividade
+--------------------------- */
 @media (max-width: 768px) {
   .planos-container {
-    padding: 10px;
+    padding: 15px;
+    margin-top: 15px; /* mais próximo da navbar */
   }
-  .planos-form {
-    gap: 10px;
+
+  .titulo-principal {
+    font-size: 1.6rem;
+  }
+
+  .subtitulo {
+    font-size: 1rem;
   }
 }

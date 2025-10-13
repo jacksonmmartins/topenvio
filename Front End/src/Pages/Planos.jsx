@@ -14,11 +14,11 @@ export default function Planos() {
   const [novoPlano, setNovoPlano] = useState({
     tipo: "Premium",
     valor: "99.90",
-    descricao: "Acesso completo e ilimitado às funcionalidades da plataforma.",
+    descricao:
+      "Acesso completo e ilimitado às funcionalidades da plataforma Top Envio.",
   });
   const [editPlanoId, setEditPlanoId] = useState(null);
 
-  // Decodifica token para definir papel do usuário
   useEffect(() => {
     if (token) {
       try {
@@ -30,16 +30,10 @@ export default function Planos() {
     }
   }, [token]);
 
-  // Busca planos do backend
   const fetchPlanos = async () => {
     try {
       const res = await getPlanos();
-      if (Array.isArray(res.data)) {
-        setPlanos(res.data);
-      } else {
-        console.error("API não retornou um array:", res.data);
-        setPlanos([]);
-      }
+      setPlanos(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Erro ao buscar planos:", err);
       setPlanos([]);
@@ -50,33 +44,22 @@ export default function Planos() {
     fetchPlanos();
   }, []);
 
-  // Criar novo plano
   const handleCriarPlano = async (e) => {
     e.preventDefault();
     try {
       const res = await criarPlano(novoPlano);
-
-      // Certifica que planos é um array antes de atualizar
-      setPlanos(Array.isArray(planos) ? [...planos, res.data] : [res.data]);
-
-      setNovoPlano({
-        tipo: "Premium",
-        valor: "",
-        descricao: "",
-      });
+      setPlanos([...planos, res.data]);
+      setNovoPlano({ tipo: "Premium", valor: "", descricao: "" });
     } catch (err) {
       console.error("Erro ao criar plano:", err);
       alert("Falha ao salvar plano. Verifique permissões de administrador.");
     }
   };
 
-  // Editar plano
   const handleEditPlano = async (plano) => {
     try {
       const res = await atualizarPlano(plano._id, plano);
-      setPlanos(
-        planos.map((p) => (p._id === plano._id ? res.data : p))
-      );
+      setPlanos(planos.map((p) => (p._id === plano._id ? res.data : p)));
       setEditPlanoId(null);
     } catch (err) {
       console.error("Erro ao atualizar plano:", err);
@@ -84,7 +67,6 @@ export default function Planos() {
     }
   };
 
-  // Excluir plano
   const handleDeletePlano = async (id) => {
     if (!window.confirm("Deseja realmente excluir este plano?")) return;
     try {
@@ -98,9 +80,27 @@ export default function Planos() {
 
   return (
     <div className="planos-container">
-      <h1>Planos disponíveis</h1>
+      <h1 className="titulo-principal">Escolha o plano ideal para o seu negócio</h1>
+      <p className="subtitulo">
+        A <strong>Top Envio</strong> oferece soluções logísticas inteligentes para todos os
+        perfis — do empreendedor iniciante à grande operação.
+      </p>
 
-      {/* Formulário para admin criar plano */}
+      {/* 🔹 Bloco institucional "Por que escolher a Top Envio?" */}
+      <div className="destaque-topenvio">
+        <h2>✨ Por que escolher a Top Envio?</h2>
+        <ul>
+          <li>Reduza custos logísticos e aumente a eficiência operacional.</li>
+          <li>Tenha controle total de seus envios em um único painel.</li>
+          <li>Atendimento humano e suporte técnico especializado.</li>
+          <li>Tecnologia segura, rápida e 100% brasileira.</li>
+        </ul>
+        <p className="frase-final">
+          Simplifique sua logística. Entregue mais, com menos esforço —{" "}
+          <strong>Top Envio</strong>, a tecnologia que move o seu negócio.
+        </p>
+      </div>
+
       {userRole === "admin" && (
         <div className="admin-section">
           <h2>Gerenciar Planos</h2>
@@ -108,9 +108,7 @@ export default function Planos() {
             <label>Tipo de plano:</label>
             <select
               value={novoPlano.tipo}
-              onChange={(e) =>
-                setNovoPlano({ ...novoPlano, tipo: e.target.value })
-              }
+              onChange={(e) => setNovoPlano({ ...novoPlano, tipo: e.target.value })}
             >
               <option value="Premium">Premium</option>
               <option value="Econômico">Econômico</option>
@@ -122,9 +120,7 @@ export default function Planos() {
             <input
               type="text"
               value={novoPlano.valor}
-              onChange={(e) =>
-                setNovoPlano({ ...novoPlano, valor: e.target.value })
-              }
+              onChange={(e) => setNovoPlano({ ...novoPlano, valor: e.target.value })}
               required
             />
 
@@ -137,12 +133,11 @@ export default function Planos() {
               required
             />
 
-            <button type="submit">Salvar Plano</button>
+            <button type="submit" className="btn-primary">Salvar Plano</button>
           </form>
         </div>
       )}
 
-      {/* Listagem de planos */}
       <div className="planos-list">
         {planos.length > 0 ? (
           planos.map((plano) => (
@@ -169,27 +164,33 @@ export default function Planos() {
               ) : (
                 <>
                   <h3>{plano.tipo}</h3>
-                  <p>
-                    <strong>R$ {plano.valor}</strong>
-                  </p>
-                  <p>{plano.descricao}</p>
+                  <p className="valor">R$ {plano.valor}</p>
+                  <p className="descricao">{plano.descricao}</p>
 
-                  {userRole === "admin" && (
+                  {userRole === "admin" ? (
                     <div className="admin-actions">
-                      <button onClick={() => setEditPlanoId(plano._id)}>
+                      <button
+                        className="btn-editar"
+                        onClick={() => setEditPlanoId(plano._id)}
+                      >
                         Editar
                       </button>
-                      <button onClick={() => handleDeletePlano(plano._id)}>
+                      <button
+                        className="btn-excluir"
+                        onClick={() => handleDeletePlano(plano._id)}
+                      >
                         Excluir
                       </button>
                     </div>
+                  ) : (
+                    <button className="btn-primary">Assinar Agora</button>
                   )}
                 </>
               )}
             </div>
           ))
         ) : (
-          <p>Nenhum plano disponível.</p>
+          <p>Nenhum plano disponível no momento.</p>
         )}
       </div>
     </div>
