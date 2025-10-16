@@ -9,9 +9,11 @@ export default function Layout() {
   return (
     <>
       <Navbar />
-      <main className="page-content">
-        <Outlet />
-      </main>
+      <div className="scroll-container">
+        <main className="page-content">
+          <Outlet />
+        </main>
+      </div>
       <Footer />
     </>
   );
