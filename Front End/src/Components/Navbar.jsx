@@ -8,21 +8,21 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
 
- useEffect(() => {
-  if (token && token.includes(".")) {
-    try {
-      const payload = token.split(".")[1];
-      const decoded = JSON.parse(atob(payload));
-      setUserRole(decoded.role || null);
-    } catch (error) {
-      console.error("Erro ao decodificar token:", error);
-      localStorage.removeItem("token"); // remove token corrompido
+  useEffect(() => {
+    if (token && token.includes(".")) {
+      try {
+        const payload = token.split(".")[1];
+        const decoded = JSON.parse(atob(payload));
+        setUserRole(decoded.role || null);
+      } catch (error) {
+        console.error("Erro ao decodificar token:", error);
+        localStorage.removeItem("token");
+        setUserRole(null);
+      }
+    } else {
       setUserRole(null);
     }
-  } else {
-    setUserRole(null);
-  }
-}, [token]);
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -31,9 +31,9 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      {/* Marca / logo */}
+      {/* Marca */}
       <div className="navbar-brand">
-        <Link to="/" onClick={() => setIsOpen(false)} style={{ color: "#fff", textDecoration: "none" }}>
+        <Link to="/" onClick={() => setIsOpen(false)} style={{ color: "#0d0c0cff", textDecoration: "none" }}>
           Top Envio
         </Link>
       </div>
@@ -45,74 +45,40 @@ export default function Navbar() {
         <span className="bar"></span>
       </div>
 
-      {/* Menu */}
+      {/* Menu central */}
       <ul className={`navbar-menu ${isOpen ? "open" : ""}`}>
-        <li>
-          <Link to="/" onClick={() => setIsOpen(false)}>
-            Home
-          </Link>
-        </li>
-        <li>
-          <Link to="/planos" onClick={() => setIsOpen(false)}>
-            Planos
-          </Link>
-        </li>
-        <li>
-          <Link to="/sobre" onClick={() => setIsOpen(false)}>
-            Sobre
-          </Link>
-        </li>
+        <li><Link to="/" onClick={() => setIsOpen(false)}>Home</Link></li>
+        <li><Link to="/planos" onClick={() => setIsOpen(false)}>Planos</Link></li>
+        <li><Link to="/sobre" onClick={() => setIsOpen(false)}>Sobre</Link></li>
 
-        {/* Se for administrador → mostra Dashboard */}
         {token && userRole === "admin" && (
-          <li>
-            <Link
-              to="/admin"
-              onClick={() => setIsOpen(false)}
-              className="dashboard-link"
-            >
-              Dashboard
-            </Link>
-          </li>
+          <li><Link to="/admin" onClick={() => setIsOpen(false)}>Dashboard</Link></li>
         )}
-
-        {/* Se for usuário comum → mostra Dados */}
         {token && userRole !== "admin" && (
-          <li>
-            <Link
-              to="/profile"
-              onClick={() => setIsOpen(false)}
-              className="dados-link"
-            >
-              Dados
-            </Link>
-          </li>
+          <li><Link to="/profile" onClick={() => setIsOpen(false)}>Dados</Link></li>
         )}
-
-        {/* Se não estiver logado → mostra Login */}
         {!token && (
-          <li>
-            <Link to="/login" onClick={() => setIsOpen(false)}>
-              Login
-            </Link>
-          </li>
+          <li><Link to="/login" onClick={() => setIsOpen(false)}>Login</Link></li>
         )}
 
-        {/* Se estiver logado → mostra botão Sair */}
+        {/* Mostra o botão sair dentro do menu no mobile */}
         {token && (
-          <li>
-            <button
-              onClick={() => {
-                handleLogout();
-                setIsOpen(false);
-              }}
-              className="logout-btn"
-            >
+          <li className="mobile-only">
+            <button onClick={() => { handleLogout(); setIsOpen(false); }} className="logout-btn">
               Sair
             </button>
           </li>
         )}
       </ul>
+
+      {/* Botão sair separado (desktop) */}
+      {token && (
+        <div className="navbar-right desktop-only">
+          <button onClick={handleLogout} className="logout-btn">
+            Sair
+          </button>
+        </div>
+      )}
     </nav>
   );
 }

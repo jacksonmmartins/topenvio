@@ -1,64 +1,101 @@
-/* Navbar geral (desktop) */
+/* Navbar geral (desktop e mobile) */
 .navbar {
-  width: 100%;
-  background-color: #0073e6;
-  display: flex;
-  justify-content: space-between; /* marca à esquerda, menu à direita */
-  align-items: center;
-  padding: 1rem 2rem;
   position: fixed;
   top: 0;
-  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.7); /* fundo translúcido */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  color: #222;
+  font-family: 'Poppins', sans-serif;
   z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  color: #fff;
-  font-family: 'Arial', sans-serif;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Marca da empresa */
+/* Marca à esquerda (mesma cor dos menus) */
 .navbar-brand {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 1.5rem;
+  letter-spacing: 0.5px;
+  color: #222; /* mesma cor dos links */
+  flex: 0 0 auto;
+  text-decoration: none;
 }
 
-/* Menu da Navbar (desktop) */
+/* Menu central */
 .navbar-menu {
   list-style: none;
   display: flex;
-  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  gap: 2rem;
   margin: 0;
   padding: 0;
 }
 
-/* Links da Navbar */
+/* Links do menu */
 .navbar-menu li a {
-  color: #fff;
+  color: #222; /* mesmo que a marca */
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.navbar-menu li a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background: #0077ff;
+  transition: width 0.3s ease;
+  border-radius: 2px;
 }
 
 .navbar-menu li a:hover {
-  color: #ffdd57;
+  color: #0077ff;
+}
+
+.navbar-menu li a:hover::after {
+  width: 100%;
+}
+
+/* Área direita (Logout desktop) */
+.navbar-right {
+  flex: 0 0 auto;
 }
 
 /* Botão sair */
-.navbar-menu li button {
-  background: transparent;
-  border: none;
-  color: #fff;
+.logout-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  color: #222;
   font-weight: 500;
+  padding: 6px 14px;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(6px);
 }
 
-.navbar-menu li button:hover {
-  color: #ff4d4f;
+.logout-btn:hover {
+  background-color: rgba(0, 119, 255, 0.8);
+  border-color: rgba(0, 119, 255, 0.8);
+  color: #fff;
 }
 
-/* Botão sanduíche (apenas mobile) */
+/* Botão sanduíche (mobile) */
 .menu-toggle {
-  display: none; /* só aparece no mobile */
+  display: none;
   flex-direction: column;
   cursor: pointer;
 }
@@ -66,31 +103,77 @@
 .menu-toggle .bar {
   width: 25px;
   height: 3px;
-  background: white;
+  background: #222;
   margin: 4px 0;
   border-radius: 2px;
+  transition: all 0.3s ease;
 }
 
-/* Responsividade (mobile) */
+.menu-toggle:hover .bar {
+  background: #0077ff;
+}
+
+/* Visibilidade desktop/mobile */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
   .menu-toggle {
     display: flex;
   }
 
+  .navbar {
+    padding: 0.8rem 1.2rem;
+  }
+
   .navbar-menu {
-    display: none; /* escondido por padrão */
+    display: none;
     position: absolute;
-    top: 60px;
+    top: 100%;
     right: 0;
     flex-direction: column;
     gap: 1rem;
-    background-color: #0073e6;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 1.5rem 1.2rem;
     width: 200px;
-    padding: 1rem;
-    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   }
 
   .navbar-menu.open {
-    display: flex; /* aberto quando ativo */
+    display: flex;
+  }
+
+  .navbar-menu li a {
+    font-size: 1.05rem;
+    color: #222;
+  }
+
+  .navbar-right.desktop-only {
+    display: none; /* esconde botão desktop no mobile */
+  }
+
+  .mobile-only {
+    display: block; /* mostra botão dentro do menu mobile */
+  }
+
+  .logout-btn {
+    width: 100%;
+    text-align: center;
+    background: rgba(0, 119, 255, 0.15);
+    border-color: transparent;
+    color: #0077ff;
+  }
+
+  .logout-btn:hover {
+    background: rgba(0, 119, 255, 0.8);
+    color: #fff;
   }
 }
