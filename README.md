@@ -47,11 +47,11 @@ git clone https://github.com/jacksonmmartins/topenvio.git
 cd topenvio
 
 # Dependências front-end
-cd Front\ End
-npm install
+cd "Front End"
+npm i express
 npm run dev
 
 # Dependências back-end
-cd ../Back\ End
-npm install
+cd "Back End"
+npm i express
 npm run dev
