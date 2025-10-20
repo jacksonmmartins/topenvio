@@ -11,6 +11,8 @@ import adminRoutes from "./Routes/Admin.js";
 import planosRoutes from "./Routes/Planos.js";
 import User from "./Models/User.js";
 
+import cepRoutes from "./Routes/Cep.js";
+
 dotenv.config();
 const app = express();
 
@@ -38,6 +40,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions)); // para preflight (Safari / mobile)
 // ============================================================
+
+app.use("/api/cep", cepRoutes);
 
 // 🧩 Middlewares
 app.use(express.json());

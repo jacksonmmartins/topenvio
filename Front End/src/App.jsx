@@ -13,6 +13,7 @@ import ResetPassword from "./Pages/ResetPassword";
 import Admin from "./Pages/Admin";
 import AdminPanel from "./Pages/AdminPanel";
 import Usuarios from "./Pages/Usuarios";
+import NovaEntrega from "./Pages/NovaEntrega";
 
 export default function App() {
   return (
@@ -38,6 +39,16 @@ export default function App() {
               </PrivateRoute>
             }
           />
+
+             <Route
+            path="nova-entrega"
+            element={
+              <PrivateRoute>
+                <NovaEntrega />
+              </PrivateRoute>
+            }
+          />
+
           <Route
             path="profile"
             element={
