@@ -2,13 +2,12 @@ name: Keep Alive Top Envio
 
 on:
   schedule:
-    - cron: "*/10 * * * *"  # roda a cada 10 minutos
-  workflow_dispatch:        # permite rodar manualmente pelo GitHub
+    - cron: "*/1 * * * *"
+  workflow_dispatch:
 
 jobs:
   keep_alive:
     runs-on: ubuntu-latest
-
     steps:
       - name: Ping Vercel app
         run: |
