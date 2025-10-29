@@ -1,0 +1,17 @@
+name: Keep Alive Top Envio
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"  # roda a cada 10 minutos
+  workflow_dispatch:        # permite rodar manualmente pelo GitHub
+
+jobs:
+  keep_alive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Vercel app
+        run: |
+          echo "⏱️ Mantendo Top Envio ativo..."
+          curl -s -o /dev/null -w "%{http_code}\n" https://topenvio.vercel.app/api/ping
+          echo "✅ Ping enviado com sucesso!"
