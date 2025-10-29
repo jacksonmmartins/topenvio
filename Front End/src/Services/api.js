@@ -1,64 +1,70 @@
 // src/Services/api.js
 import axios from "axios";
 
-// 🔹 Define a URL base dependendo do ambiente
-const baseURL =
-  import.meta.env.MODE === "development"
-    ? "http://localhost:5000/api"      // backend local
-    : import.meta.env.VITE_API_URL || "https://topenvio.onrender.com/api"; // backend remoto
+// 🔹 Determina a URL base
+const baseURL = (() => {
+  if (import.meta.env.MODE === "development") {
+    return "http://localhost:5000/api"; // backend local
+  }
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL; // backend remoto definido na Vercel
+  }
+  // fallback seguro caso não tenha variável de ambiente
+  console.warn(
+    "VITE_API_URL não definida, usando fallback https://topenvio.onrender.com/api"
+  );
+  return "https://topenvio.onrender.com/api";
+})();
 
 // 🔹 Cria instância Axios
 const api = axios.create({
   baseURL,
-  withCredentials: true, // necessário para cookies/JWT
+  withCredentials: true, // cookies/JWT
 });
 
-// 🔹 Interceptor para enviar token JWT se existir
+// 🔹 Interceptor para enviar token JWT
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token"); // opcional se usar JWT
+  const token = localStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
 // 🔹 Funções de autenticação
-
-// Login
-// Se backend usar cookies, o token é enviado automaticamente
 export async function login(email, password) {
   return api.post("/auth/login", { email, password });
 }
 
-// Registrar usuário
 export async function register(name, email, password) {
   return api.post("/auth/register", { name, email, password });
 }
 
-// Perfil do usuário logado
 export async function getProfile() {
   return api.get("/auth/profile");
 }
 
-// Atualizar perfil
 export async function updateProfile(data) {
   return api.put("/auth/profile", data);
 }
 
 // 🔹 Funções Planos
 export async function getPlanos() {
-  return api.get("/planos"); // públicos
+  return api.get("/planos");
 }
 
 export async function criarPlano(dados) {
-  return api.post("/planos", dados); // só admin
+  return api.post("/planos", dados);
 }
 
 export async function atualizarPlano(id, dados) {
-  return api.put(`/planos/${id}`, dados); // só admin
+  return api.put(`/planos/${id}`, dados);
 }
 
 export async function excluirPlano(id) {
-  return api.delete(`/planos/${id}`); // só admin
+  return api.delete(`/planos/${id}`);
 }
 
-// 🔹 Exporta a instância Axios
+// 🔹 Exporta instância
 export default api;
+
+// 🔹 DEBUG: mostra URL usada
+console.log("API Base URL:", baseURL);
