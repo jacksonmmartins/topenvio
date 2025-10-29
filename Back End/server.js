@@ -53,6 +53,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/planos", planosRoutes);
 
+app.get("/ping", (req, res) => {
+  res.status(200).json({ message: "Servidor Top Envio ativo!" });
+});
+
 // ============================================================
 // 💾 Conexão com o MongoDB
 mongoose
