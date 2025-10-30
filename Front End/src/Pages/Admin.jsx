@@ -1,50 +1,95 @@
+// Admin.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./Admin.css";
 import { FaTrash } from "react-icons/fa";
+import "./Admin.css";
 
 export default function Admin() {
   const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Pega o token do localStorage
   const token = localStorage.getItem("token");
 
+  // Base URL da API definida via variável de ambiente
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/admin/clients", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setClients(res.data))
-      .catch((err) => console.error(err));
-  }, [token]);
+    const fetchClients = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${API_BASE_URL}/admin/users`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setClients(response.data);
+        setError(null);
+      } catch (err) {
+        console.error("Erro ao buscar usuários:", err);
+        setError("Não foi possível carregar os usuários.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClients();
+  }, [token, API_BASE_URL]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Deseja excluir este cliente?")) return;
+    if (!window.confirm("Deseja realmente excluir este usuário?")) return;
+
     try {
-      await axios.delete(`http://localhost:5000/api/admin/clients/${id}`, {
+      await axios.delete(`${API_BASE_URL}/admin/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setClients(clients.filter((c) => c._id !== id));
-      alert("Cliente excluído e e-mail enviado!");
+      setClients(clients.filter((client) => client._id !== id));
     } catch (err) {
-      alert("Erro ao excluir cliente");
+      console.error("Erro ao excluir usuário:", err);
+      alert("Não foi possível excluir o usuário.");
     }
   };
 
   return (
-    <div className="admin-page">
-      <h1>Painel do Administrador</h1>
-      <div className="client-cards">
-        {clients.map((client) => (
-          <div key={client._id} className="client-card">
-            <h3>{client.name}</h3>
-            <p><strong>Email:</strong> {client.email}</p>
-            <p><strong>Empresa:</strong> {client.companyName || "Não informado"}</p>
-            <p><strong>Porte:</strong> {client.companySize}</p>
-            <button onClick={() => handleDelete(client._id)} className="delete-btn">
-              <FaTrash /> Excluir
-            </button>
-          </div>
-        ))}
-      </div>
+    <div className="admin-container">
+      <h2>Lista de Usuários</h2>
+
+      {loading && <p>Carregando usuários...</p>}
+      {error && <p className="error">{error}</p>}
+
+      {!loading && !error && (
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {clients.length === 0 && (
+              <tr>
+                <td colSpan="3">Nenhum usuário encontrado.</td>
+              </tr>
+            )}
+            {clients.map((client) => (
+              <tr key={client._id}>
+                <td>{client.name}</td>
+                <td>{client.email}</td>
+                <td>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(client._id)}
+                  >
+                    <FaTrash />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
