@@ -10,17 +10,15 @@ import authRoutes from "./Routes/Auth.js";
 import adminRoutes from "./Routes/Admin.js";
 import planosRoutes from "./Routes/Planos.js";
 import User from "./Models/User.js";
-
 import cepRoutes from "./Routes/Cep.js";
 
 dotenv.config();
 const app = express();
 
 // ============================================================
-// 🌐 Configuração CORS (para ambiente local e produção)
+// 🌐 Configuração CORS
 const allowedOrigins = [
-  "https://topenvio.vercel.app", // produção (Vercel)
-  "http://localhost:5173",        // desenvolvimento local (Vite)
+  process.env.FRONTEND_URL || "http://localhost:5173", // dev
 ];
 
 const corsOptions = {
@@ -32,33 +30,27 @@ const corsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, // 👈 permite cookies/autenticação
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // para preflight (Safari / mobile)
-// ============================================================
-
-app.use("/api/cep", cepRoutes);
+app.options("*", cors(corsOptions));
 
 // 🧩 Middlewares
 app.use(express.json());
 app.use(cookieParser());
 
-// ============================================================
 // 🛠 Rotas
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/planos", planosRoutes);
+app.use("/api/cep", cepRoutes);
 
-app.get("/ping", (req, res) => {
-  res.status(200).json({ message: "Servidor Top Envio ativo!" });
-});
+app.get("/ping", (req, res) => res.status(200).json({ message: "Servidor Top Envio ativo!" }));
 
-// ============================================================
-// 💾 Conexão com o MongoDB
+// 💾 Conexão com MongoDB
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -67,8 +59,7 @@ mongoose
   .then(() => console.log("✅ Conectado ao MongoDB"))
   .catch((err) => console.error("❌ Erro ao conectar:", err));
 
-// ============================================================
-// 👑 Criação automática do admin padrão
+// 👑 Criação automática do admin
 async function createAdminUser() {
   const adminEmail = process.env.ADMIN_EMAIL || "admin@topenvio.com";
   const adminPassword = process.env.ADMIN_PASSWORD || "123456";
@@ -83,7 +74,7 @@ async function createAdminUser() {
         password: hashedPassword,
         role: "admin",
       });
-      console.log("👑 Administrador criado com sucesso!");
+      console.log("👑 Administrador criado!");
     }
   } catch (err) {
     console.error("Erro ao criar admin:", err);
@@ -91,9 +82,6 @@ async function createAdminUser() {
 }
 createAdminUser();
 
-// ============================================================
 // 🚀 Inicialização do servidor
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`🚀 Servidor rodando na porta ${PORT} — Ambiente: ${process.env.NODE_ENV}`)
-);
+app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));

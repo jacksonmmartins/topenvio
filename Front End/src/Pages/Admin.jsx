@@ -1,4 +1,3 @@
-// Admin.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTrash } from "react-icons/fa";
@@ -9,10 +8,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Pega o token do localStorage
   const token = localStorage.getItem("token");
-
-  // Base URL da API definida via variável de ambiente
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
@@ -20,9 +16,7 @@ export default function Admin() {
       try {
         setLoading(true);
         const response = await axios.get(`${API_BASE_URL}/admin/users`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setClients(response.data);
         setError(null);
@@ -54,10 +48,8 @@ export default function Admin() {
   return (
     <div className="admin-container">
       <h2>Lista de Usuários</h2>
-
       {loading && <p>Carregando usuários...</p>}
       {error && <p className="error">{error}</p>}
-
       {!loading && !error && (
         <table className="admin-table">
           <thead>
@@ -78,10 +70,7 @@ export default function Admin() {
                 <td>{client.name}</td>
                 <td>{client.email}</td>
                 <td>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(client._id)}
-                  >
+                  <button className="delete-btn" onClick={() => handleDelete(client._id)}>
                     <FaTrash />
                   </button>
                 </td>
