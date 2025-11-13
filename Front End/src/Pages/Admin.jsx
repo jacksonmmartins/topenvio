@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaTrash } from "react-icons/fa";
 import "./Admin.css";
+console.log("API Base URL:", import.meta.env.VITE_API_BASE_URL);
 
 export default function Admin() {
   const [clients, setClients] = useState([]);
@@ -9,7 +10,7 @@ export default function Admin() {
   const [error, setError] = useState(null);
 
   const token = localStorage.getItem("token");
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
   useEffect(() => {
     const fetchClients = async () => {
