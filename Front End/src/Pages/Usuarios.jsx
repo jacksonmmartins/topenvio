@@ -20,7 +20,7 @@ export default function Admin() {
   const handleDelete = async (id) => {
     if (!window.confirm("Deseja excluir este cliente?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/admin/users/${id}`, {
+      await axios.delete(`https://topenvio.onrender.com/api/admin/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setClients(clients.filter((c) => c._id !== id));
