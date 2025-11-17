@@ -1,70 +1,102 @@
 // src/Services/api.js
 import axios from "axios";
 
-// 🔹 Determina a URL base
+// =====================================================
+// 🔹 Definir Base URL com comportamento ideal no Vite
+// =====================================================
+
 const baseURL = (() => {
-  if (import.meta.env.MODE === "development") {
-    return "http://localhost:5000/api"; // backend local
+  const mode = import.meta.env.MODE;
+  const envURL = import.meta.env.VITE_API_URL;
+
+  // Ambiente local
+  if (mode === "development") {
+    console.log("🌱 Modo desenvolvimento detectado → usando backend local");
+    return "http://localhost:5000/api";
   }
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL; // backend remoto definido na Vercel
+
+  // Produção com variável configurada na Vercel
+  if (envURL) {
+    console.log("🏗️ Usando VITE_API_URL definida na Vercel:", envURL);
+    return envURL;
   }
-  // fallback seguro caso não tenha variável de ambiente
+
+  // 🚨 Fallback seguro (evita quebra do app)
   console.warn(
-    "VITE_API_URL não definida, usando fallback https://topenvio.onrender.com/api"
+    "⚠️ VITE_API_URL não definida — usando fallback https://topenvio.onrender.com/api"
   );
   return "https://topenvio.onrender.com/api";
 })();
 
-// 🔹 Cria instância Axios
+// =====================================================
+// 🔹 Criar instância Axios
+// =====================================================
+
 const api = axios.create({
   baseURL,
-  withCredentials: true, // cookies/JWT
+  withCredentials: true, // permite cookies/sessão/JWT
 });
 
-// 🔹 Interceptor para enviar token JWT
+// =====================================================
+// 🔹 Interceptor para anexar JWT se existir
+// =====================================================
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
-// 🔹 Funções de autenticação
-export async function login(email, password) {
+// =====================================================
+// 🔹 Endpoints de Autenticação
+// =====================================================
+
+export function login(email, password) {
   return api.post("/auth/login", { email, password });
 }
 
-export async function register(name, email, password) {
+export function register(name, email, password) {
   return api.post("/auth/register", { name, email, password });
 }
 
-export async function getProfile() {
+export function getProfile() {
   return api.get("/auth/profile");
 }
 
-export async function updateProfile(data) {
+export function updateProfile(data) {
   return api.put("/auth/profile", data);
 }
 
-// 🔹 Funções Planos
-export async function getPlanos() {
+// =====================================================
+// 🔹 Endpoints de Planos
+// =====================================================
+
+export function getPlanos() {
   return api.get("/planos");
 }
 
-export async function criarPlano(dados) {
+export function criarPlano(dados) {
   return api.post("/planos", dados);
 }
 
-export async function atualizarPlano(id, dados) {
+export function atualizarPlano(id, dados) {
   return api.put(`/planos/${id}`, dados);
 }
 
-export async function excluirPlano(id) {
+export function excluirPlano(id) {
   return api.delete(`/planos/${id}`);
 }
 
-// 🔹 Exporta instância
+// =====================================================
+// 🔹 Export default da instância Axios
+// =====================================================
+
 export default api;
 
-// 🔹 DEBUG: mostra URL usada
-console.log("API Base URL:", baseURL);
+// =====================================================
+// 🔹 Debug
+// =====================================================
+
+console.log("⚙️ API Base URL carregada:", baseURL);
