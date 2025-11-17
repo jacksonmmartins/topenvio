@@ -10,7 +10,7 @@ export default function Admin() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/admin/users", {
+      .get("https://topenvio.onrender.com/api/admin/users", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setClients(res.data))
